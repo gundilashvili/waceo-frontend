@@ -35,6 +35,7 @@ export const getMinterTransactions = async () => {
                     items =  res.data.data.items  
                 }
             })  
+            
 
            
             async function getAllowance(_tokenAddress, _ownerAddress){

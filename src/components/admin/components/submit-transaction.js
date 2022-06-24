@@ -76,6 +76,7 @@ export const SubmitTransaction = (props) => {
             return;
           }
         }
+        
         setIsLoading(true);
         const response = await props.submit(sender, type)
         if(response.success){
