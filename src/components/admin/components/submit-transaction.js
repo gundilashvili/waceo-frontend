@@ -50,6 +50,7 @@ export const SubmitTransaction = (props) => {
 
  
   
+  
   const handleSubmitTransaction = async () => {
     try{
       let type  
@@ -76,7 +77,7 @@ export const SubmitTransaction = (props) => {
             return;
           }
         }
-        
+
         setIsLoading(true);
         const response = await props.submit(sender, type)
         if(response.success){
