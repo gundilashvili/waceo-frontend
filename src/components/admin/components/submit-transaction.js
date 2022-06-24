@@ -65,6 +65,17 @@ export const SubmitTransaction = (props) => {
         sender = props.requestDetails.details.sender;
       } 
       if(type && sender){
+        if(type == "mint_double"){
+          if(parseFloat(props.requestDetails.details.allowance.balance) < parseFloat(props.requestDetails.details.amount)){ 
+            setAlertMessage("Insufficient  user balance!");
+            setAlertSeverity("error");
+            return;
+          }else if(parseFloat(props.requestDetails.details.allowance.value) < parseFloat(props.requestDetails.details.amount)){
+            setAlertMessage("Insufficient allowance!");
+            setAlertSeverity("error");
+            return;
+          }
+        }
         setIsLoading(true);
         const response = await props.submit(sender, type)
         if(response.success){
@@ -178,8 +189,8 @@ export const SubmitTransaction = (props) => {
                           )} 
                         {props.requestDetails.method == "SHIELDS UP EVENT" && (
                         <TableRow>
-                          <TableCell colSpan={1}>Amount</TableCell>
-                          <TableCell align="right">{props.requestDetails.waceoAmount}</TableCell>
+                          <TableCell colSpan={1}>Token amount</TableCell>
+                          <TableCell align="right">{props.requestDetails.details.amount}</TableCell>
                         </TableRow> 
                          )} 
                         <TableRow>
@@ -190,6 +201,12 @@ export const SubmitTransaction = (props) => {
                           <TableRow>
                             <TableCell colSpan={1}>Minter contract allowance</TableCell>
                             <TableCell align="right">{props.requestDetails.details.allowance.value}</TableCell>
+                          </TableRow> 
+                        )}
+                        {props.requestDetails.method == "SHIELDS UP EVENT" && (
+                          <TableRow>
+                            <TableCell colSpan={1}>Request sender balance</TableCell>
+                            <TableCell align="right">{props.requestDetails.details.allowance.balance}</TableCell>
                           </TableRow> 
                         )}
                         <TableRow>

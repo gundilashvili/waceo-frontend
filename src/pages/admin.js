@@ -30,8 +30,7 @@ const Admin = () => {
 
   const getListOfOwners = async () => {
     try{
-      const response = await getOwners();   
-      console.log("Response: ", response)
+      const response = await getOwners();    
       if(response.success){
         if(response.owners && response.account){ 
           for(let i of response.owners){
@@ -58,7 +57,7 @@ const Admin = () => {
       <div>
          <Head>
            <title>
-             Multisig | WACEO
+             Requests | WACEO
            </title>
          </Head>
          <Box

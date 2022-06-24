@@ -36,21 +36,33 @@ export const getMinterTransactions = async () => {
                 }
             })  
 
-            // Format request date
+           
             async function getAllowance(_tokenAddress, _ownerAddress){
                 const tokenContract = new ethers.Contract( _tokenAddress, ERC20, provider); 
                 const tokenName =  await tokenContract.name();
                 const tokenSymbol =  await tokenContract.symbol();
                 const decimals = await tokenContract.decimals();
                 const response = await tokenContract.allowance( _ownerAddress, addresses.Minter ); 
-                const formatedResponse = parseFloat(response.toString())/10**decimals;
+                const balance = await tokenContract.balanceOf(_ownerAddress);
+                console.log("getting balance:", tokenSymbol)
+                console.log("_tokenAddress:", _tokenAddress)
+                console.log("_ownerAddress:", _ownerAddress)
+                const formattedBalance = parseFloat(balance.toString())/(10**decimals);
+                const formatedResponse = parseFloat(response.toString())/(10**decimals);
+                console.log("balanceeee:", balance.toString())
+                console.log("formattedBalance:",formattedBalance)
+                console.log("-----------------------------------------")
                 const allowance = {
                     value: formatedResponse, 
                     name: tokenName, 
-                    symbol: tokenSymbol
+                    symbol: tokenSymbol,
+                    balance: formattedBalance
                 }
                 return allowance;
             }
+
+            
+           
 
 
 
@@ -204,6 +216,7 @@ export const getMinterTransactions = async () => {
                         const waceoAmount = ethers.utils.formatUnits(mint_double_response.waceoAmount.toString(), 'gwei');
                         const distributionDetails = await getDistribution(waceoAmount);
                         const allowance = await getAllowance(mint_double_response.token,mint_double_response.sender );
+                        console.log("allowance", allowance)
                         transactions.push({
                             status: mint_double_response.isApproved ? "Approved" : mint_double_response.isDeclined ? "Declined":"Pending",
                             from: i, 
